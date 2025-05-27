@@ -60,7 +60,7 @@ int node_count(Node* head_ref){
         len++;
         head_ref=head_ref->next;
     }
-    printf("%s : Node count is : %d\n",__func__,len);
+    // printf("%s : Node count is : %d\n",__func__,len);
     return len;
 }
 
@@ -89,11 +89,11 @@ void insert_at_pos(Node **head_ref,int new_data,int pos){
     {
         printf("about to enter a new node at %d\n",pos);
         int count=1;
-        while(count<pos){
+        while(count<pos-1){
             count++;
             pos_node=pos_node->next;
         }
-        printf("found desired position %d\n",count);
+        printf("found desired position %d\n",count+1);
 
         new_node->next=pos_node->next;
         pos_node->next=new_node;
@@ -134,11 +134,42 @@ void delete_last_node(Node **head_ref){
     }
 }
 
+//Delete at the position specified
+void delete_at_pos(Node **head_ref,int pos){
+    Node *del_node=*head_ref;
+    int len = node_count(*head_ref);
+
+    printf("Delete the node at pos %d\n",pos);
+
+    if((pos < 1) || (pos > len+1)){
+        printf("Invalid position\n");
+        return;
+    }
+
+    if(pos==1){
+        delete_first_node(head_ref);
+    }else if(pos == len+1){
+        delete_last_node(head_ref);
+    }else{
+        int count=1;
+        while(count<pos-1){
+            count++;
+            del_node=del_node->next;
+        }
+        printf("About to delete the node at pos:%d\n",count);
+        Node *temp = del_node->next;
+        del_node->next=temp->next;
+        free(temp);
+
+    }
+}
+
+
 // Function to print the linked list
 void printlist(Node *node){
     while(node != NULL){
-        printf("In while\n");
-        printf("%d\n",node->data);
+        // printf("In while\n");
+        printf("%d\t",node->data);
         node=node->next;
     }
     printf("\n");
@@ -162,11 +193,15 @@ int main(){
 
     printlist(head);
     node_count(head);
-    insert_at_pos(&head,6,1);
+    insert_at_pos(&head,6,3);
     printlist(head);
-    delete_first_node(&head);
-    printlist(head);
-    delete_last_node(&head);
+    // printf("Delete First Node\n");
+    // delete_first_node(&head);
+    // printlist(head);
+    // printf("Delete last Node\n");
+    // delete_last_node(&head);
+    // printlist(head);
+    delete_at_pos(&head,3);
     printlist(head);
     return 0;
 }
